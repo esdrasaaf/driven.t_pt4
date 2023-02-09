@@ -18,14 +18,28 @@ export async function getBookings(req: AuthenticatedRequest, res: Response) {
 }
 
 export async function postBooking(req: AuthenticatedRequest, res: Response) {
-    try {
+  const { roomId } = req.body;
+  const { userId } = req;
 
-    } catch (error) {
-      return res.status(httpStatus.BAD_REQUEST)
+  try {
+    await bookingService.createBooking(roomId, userId);
+
+    return res.status(httpStatus.CREATED).send("Created one booking")
+  } catch (error) {
+    if (error.name === "NotFoundError") {
+      return res.sendStatus(httpStatus.NOT_FOUND);
     }
+    
+    if (error.name === "Forbidden") {
+      return res.sendStatus(httpStatus.FORBIDDEN);
+    }
+  }
 }
 
 export async function putBooking(req: AuthenticatedRequest, res: Response) {
+  const { bookingId } = req.params;
+  const { roomId } = req.body;
+
     try {
 
     } catch (error) {
