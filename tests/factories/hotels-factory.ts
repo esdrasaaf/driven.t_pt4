@@ -7,7 +7,7 @@ export async function createHotel() {
     data: {
       name: faker.name.findName(),
       image: faker.image.imageUrl(),
-    }
+    },
   });
 }
 
@@ -17,7 +17,7 @@ export async function createRoomWithHotelId(hotelId: number) {
       name: "1020",
       capacity: 3,
       hotelId: hotelId,
-    }
+    },
   });
 }
 
@@ -27,6 +27,6 @@ export async function createRoomWithHotelIdWithoutCapacity(hotelId: number) {
       name: "1020",
       capacity: 0,
       hotelId: hotelId,
-    }
+    },
   });
 }
