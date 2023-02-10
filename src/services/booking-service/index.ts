@@ -34,15 +34,30 @@ async function createBooking(roomId: number, userId: number) {
         }
     };
 
-    const result =  await bookingRepository.createBooking(roomId, userId);
-
-    return result
+    return await bookingRepository.createBooking(roomId, userId);
 }
 
-async function putBooking(userId: number, hotelId: number) {
-    const result =  await bookingRepository.updateBooking(roomId, userId);
+async function putBooking(roomId: number, bookingId: number, userId: number) {
+    const bookingByUser = await bookingRepository.findUserBooking(userId);
+    if(!bookingByUser) {
+        throw {
+            name: "Forbidden",
+            message: "We are unable to fulfill this order!",
+        }
+    };
 
-    return result
+    const room = await hotelRepository.findRoomsById(roomId);
+    if(!room) throw notFoundError();
+
+    const bookingByRoom = await bookingRepository.findBookingByRoomId(roomId);
+    if(room.capacity <= bookingByRoom.length) {
+        throw {
+            name: "Forbidden",
+            message: "We are unable to fulfill this order!",
+        }
+    };
+
+    return await bookingRepository.updateBooking(roomId, bookingId);
 }
 
 const bookingService = {
